@@ -1,4 +1,4 @@
-﻿const pages = Array.from(document.querySelectorAll('.page'));
+const pages = Array.from(document.querySelectorAll('.page'));
     const navItems = Array.from(document.querySelectorAll('.nav-item'));
     
 
@@ -37,11 +37,8 @@
     function updatePreferenceSummary() {
       const summary = document.getElementById('prefSummary');
       if (!summary) return;
-      summary.innerHTML = `
-        <div class="summary-row"><span>玩法</span><b>${state.play}</b></div>
-        <div class="summary-row"><span>兴趣</span><b>${state.interest.join(' · ')}</b></div>
-        <div class="summary-row"><span>讲解</span><b>${state.mode}</b></div>
-      `;
+      const allPrefs = [state.play, ...state.interest, state.mode].join(' · ');
+      summary.innerHTML = `<span style="opacity: 0.75; margin-right: 6px;">已选：</span><b>${allPrefs}</b>`;
     }
 
     function goPage(index) {

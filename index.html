@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
@@ -68,8 +68,10 @@
               <button class="chip active">简短版</button><button class="chip">深度版</button><button class="chip">故事版</button>
             </div>
           </div>
-          <div class="pref-summary" id="prefSummary"></div>
-          <button class="btn primary" id="recommendBtn" onclick="generateRoutes()">生成路线推荐</button>
+          <div class="sticky-bottom-action">
+            <div class="pref-summary" id="prefSummary"></div>
+            <button class="btn primary" id="recommendBtn" onclick="generateRoutes()">生成路线推荐</button>
+          </div>
         </section>
 
         <section class="page" data-tab="trace">
@@ -79,22 +81,22 @@
 
           <div class="route-summary" id="routeSummary">小衡正在根据你的偏好排序路线……</div>
           <article class="route-card" data-route="听见时间" data-sites="钟鼓楼、万宁桥、什刹海" onclick="selectRoute(this)">
-            <div class="route-no">一</div>
+            <div class="route-no">壹</div>
             <h3>听见时间</h3>
             <p>钟鼓楼、万宁桥、什刹海：从晨钟暮鼓听见城市节律。</p>
           </article>
           <article class="route-card" data-route="看见礼序" data-sites="景山、故宫、太庙、社稷坛" onclick="selectRoute(this)">
-            <div class="route-no">二</div>
+            <div class="route-no">貳</div>
             <h3>看见礼序</h3>
             <p>景山、故宫、太庙、社稷坛：在对称与轴线里看懂礼制空间。</p>
           </article>
           <article class="route-card" data-route="走过中轴" data-sites="天安门、天安门广场、正阳门" onclick="selectRoute(this)">
-            <div class="route-no">三</div>
+            <div class="route-no">叁</div>
             <h3>走过中轴</h3>
             <p>天安门、天安门广场、正阳门：沿城市脊梁走进古今北京。</p>
           </article>
           <article class="route-card" data-route="回到天地" data-sites="天坛、先农坛、永定门" onclick="selectRoute(this)">
-            <div class="route-no">四</div>
+            <div class="route-no">肆</div>
             <h3>回到天地</h3>
             <p>天坛、先农坛、永定门：在祭祀与城门之间感受天地秩序。</p>
           </article>
