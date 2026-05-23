@@ -58,4 +58,3 @@
 ## 🛠️ 技术实现
 - **HTML5 + CSS3**：采用原生 Web 技术构建，利用 Flexbox 和 CSS Variables 实现响应式与主题样式。
 - **Vanilla JavaScript**：纯原生 JS 处理页面切换、状态管理（偏好记忆）、模拟 AI 回复以及摄像头调用逻辑。
-- **无需构建**：无依赖、零配置，所有的资源均使用相对路径，开箱即用，可直接部署至 GitHub Pages。
