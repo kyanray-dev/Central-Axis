@@ -1,0 +1,241 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>中轴寻迹 AI 小程序演示版</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+</head>
+
+<body>
+  <div class="stage">
+    <button class="side-control" onclick="prevPage()" aria-label="上一页">‹</button>
+    <main class="phone" aria-label="中轴寻迹小程序原型">
+      <div class="screen">
+        <section class="page active" data-tab="trace">
+          <div class="top-mark"><span>走近中轴线</span></div>
+          <div class="hero-card">
+            <div class="title-row">
+              <div class="logo-guofeng"><span>軸</span></div>
+              <h1 style="text-align: left; margin-left: 8px;">中轴<br />寻迹</h1>
+            </div>
+            <p class="subtitle">跟着小衡，走懂北京中轴线。</p>
+            <div class="mascot-wrap" aria-label="AI吉祥物小衡">
+              <div class="ring"></div>
+              <div class="mascot">
+                <div class="hat"></div>
+                <div class="body"></div>
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+                <div class="mouth"></div>
+              </div>
+            </div>
+            <p class="page-desc hero-desc">我是 AI 吉祥物“小衡”。我会根据你的兴趣，推荐路线、讲解景点，还能帮你识别古建筑纹样。</p>
+            <div style="display: flex; gap: 12px; justify-content: center; width: 100%;">
+              <button class="btn primary" id="startBtn" onclick="startJourney()" style="flex: 1;">开始寻迹</button>
+              <button class="btn primary" id="continueBtn" onclick="continueJourney()"
+                style="display: none; flex: 1;">继续寻迹</button>
+            </div>
+            <div class="start-hint" id="startHint" style="margin-top: 12px;"><span
+                class="compass-mini"></span><span>点击后，小衡会开启寻迹流程</span></div>
+          </div>
+        </section>
+
+        <section class="page" data-tab="trace">
+          <div class="top-mark"><span>偏好选择</span></div>
+          <h2 class="page-title">先告诉小衡，你想怎么逛</h2>
+          <p class="page-desc">三步生成你的个性化中轴线游览方式。每选一项，小衡都会实时记住。</p>
+
+          <div class="paper-card">
+            <h3 class="question-title">你想怎么玩</h3>
+            <div class="chips" data-group="play">
+              <button class="chip active">轻松逛</button><button class="chip">深度看</button><button
+                class="chip">任务挑战</button>
+            </div>
+          </div>
+          <div class="paper-card">
+            <h3 class="question-title">你感兴趣的是</h3>
+            <div class="chips" data-group="interest">
+              <button class="chip active">古建筑</button><button class="chip">历史故事</button><button
+                class="chip">声音体验</button><button class="chip">拍照打卡</button>
+            </div>
+          </div>
+          <div class="paper-card">
+            <h3 class="question-title">你希望讲解方式</h3>
+            <div class="chips" data-group="mode">
+              <button class="chip active">简短版</button><button class="chip">深度版</button><button class="chip">故事版</button>
+            </div>
+          </div>
+          <div class="pref-summary" id="prefSummary"></div>
+          <button class="btn primary" id="recommendBtn" onclick="generateRoutes()">生成路线推荐</button>
+        </section>
+
+        <section class="page" data-tab="trace">
+          <div class="top-mark"><span>路线推荐</span></div>
+          <h2 class="page-title">小衡为你选了 4 条线</h2>
+          <p class="page-desc">每条路线对应一种理解中轴线的方式。点击路线会进入模拟定位与 AI 讲解。</p>
+
+          <div class="route-summary" id="routeSummary">小衡正在根据你的偏好排序路线……</div>
+          <article class="route-card" data-route="听见时间" data-sites="钟鼓楼、万宁桥、什刹海" onclick="selectRoute(this)">
+            <div class="route-no">一</div>
+            <h3>听见时间</h3>
+            <p>钟鼓楼、万宁桥、什刹海：从晨钟暮鼓听见城市节律。</p>
+          </article>
+          <article class="route-card" data-route="看见礼序" data-sites="景山、故宫、太庙、社稷坛" onclick="selectRoute(this)">
+            <div class="route-no">二</div>
+            <h3>看见礼序</h3>
+            <p>景山、故宫、太庙、社稷坛：在对称与轴线里看懂礼制空间。</p>
+          </article>
+          <article class="route-card" data-route="走过中轴" data-sites="天安门、天安门广场、正阳门" onclick="selectRoute(this)">
+            <div class="route-no">三</div>
+            <h3>走过中轴</h3>
+            <p>天安门、天安门广场、正阳门：沿城市脊梁走进古今北京。</p>
+          </article>
+          <article class="route-card" data-route="回到天地" data-sites="天坛、先农坛、永定门" onclick="selectRoute(this)">
+            <div class="route-no">四</div>
+            <h3>回到天地</h3>
+            <p>天坛、先农坛、永定门：在祭祀与城门之间感受天地秩序。</p>
+          </article>
+          <div class="progress-tip">提示：选择一条路线后，小衡会读取定位，识别附近景点并自动讲解。</div>
+        </section>
+
+        <section class="page" data-tab="activity">
+          <div class="top-mark"><span>限时活动</span></div>
+          <div class="activity-panel">
+            <div class="activity-hero">
+              <span class="tag">限时收集</span>
+              <h2>古建纹样寻宝</h2>
+              <p>拍照或上传图片，寻找中轴线古建筑里的纹样，收集专属卡片。</p>
+            </div>
+            <div class="scan-box" id="scanBox" style="display: none;">
+              <div class="scan-top">
+                <strong>小衡识别台</strong>
+                <span class="scan-status" id="scanStatus">AI 正在观察纹样</span>
+              </div>
+              <div class="dialog">
+                <div class="avatar-mini">衡</div>
+                <div class="bubble" id="aiBubble">我看到一个层层向上的方形结构，很像藻井。它常位于殿堂顶部，象征天穹与秩序。</div>
+              </div>
+              <div class="spinner-line"><span></span></div>
+            </div>
+            <div class="card-grid">
+              <div class="pattern-card featured">
+                <div class="pattern-icon caisson"></div>
+                <h3>藻井</h3>
+                <p>重点卡片：殿顶天穹，层层向心。</p>
+              </div>
+              <div class="pattern-card featured">
+                <div class="pattern-icon dougong"></div>
+                <h3>斗拱</h3>
+                <p>承托屋檐，也藏着结构之美。</p>
+              </div>
+              <div class="pattern-card featured">
+                <div class="pattern-icon beast"></div>
+                <h3>屋脊兽</h3>
+                <p>守护屋脊，记录等级与寓意。</p>
+              </div>
+            </div>
+            <div class="activity-actions">
+              <button class="btn primary" id="scanBtn" onclick="openCamera()">拍照识别</button>
+              <button class="btn secondary" onclick="fakeScan('upload')">上传图片</button>
+              <button class="btn secondary" onclick="toggleCollection()">查看已收集</button>
+            </div>
+            <div class="collection-drawer" id="collectionDrawer">已收集：藻井 1 张。继续拍照可点亮斗拱与屋脊兽卡片。</div>
+            <div class="reward">
+              <div class="badge"><span>賞</span></div>
+              <div><strong>奖励</strong><br />完成 3 类纹样收集，可获得“古建观察者”徽章。</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" data-tab="trace">
+          <div class="top-mark"><span>AI 讲解</span></div>
+          <h2 class="page-title">小衡正在为你讲解</h2>
+          <p class="page-desc">基于 GPS 定位识别附近景点，并结合你的偏好组织讲解。</p>
+          <div class="location-status" id="locationStatus">GPS 已授权：正在识别你附近的中轴线节点。</div>
+          <div class="map-card" id="mapCard" data-status="GPS 定位中 · 识别附近景点">
+            <div class="map-route"></div>
+            <div class="pin"></div>
+            <div class="map-label" id="mapLabel">正在获取定位...</div>
+          </div>
+
+          <div id="nearbySpotsContainer" style="display: none; margin-bottom: 14px;">
+            <div class="page-desc" style="color:var(--palace-red-dark); font-weight:600; margin-bottom:8px;">
+              发现附近景点（点击切换讲解）</div>
+            <div class="chips" id="nearbyChips"></div>
+          </div>
+
+          <div class="ai-card">
+            <h3 id="modeTitle">简短版讲解</h3>
+            <p id="modeText">你现在靠近北京中轴线的重要节点。中轴线像城市的脊梁，把宫殿、坛庙、城门和公共空间串联起来，让北京的秩序一眼可见。</p>
+          </div>
+          <div class="quick-qs">
+            <button class="btn ghost" onclick="answerQuestion('meaning')">这个纹样有什么含义？</button>
+            <button class="btn ghost" onclick="answerQuestion('axis')">它和中轴线有什么关系？</button>
+          </div>
+        </section>
+
+        <section class="page" data-tab="mine">
+          <div class="top-mark"><span>我的足迹 / 徽章</span></div>
+          <div class="profile-card">
+            <div class="profile-head">
+              <img class="profile-avatar"
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
+                alt="微信头像" />
+              <div>
+                <h2>微信用户_1024</h2>
+                <p>我的中轴寻迹成果</p>
+              </div>
+            </div>
+            <div class="stats">
+              <div class="stat"><strong>2</strong><span>已走路线</span></div>
+              <div class="stat"><strong>1/3</strong><span>已收集纹样</span></div>
+              <div class="stat"><strong>1</strong><span>已获得徽章</span></div>
+              <div class="stat"><strong>古建 · 故事</strong><span>小衡记住了你的偏好</span></div>
+            </div>
+          </div>
+          <div class="share-card">
+            <div class="badge" style="margin:0 auto 10px;">卡</div>
+            <h2 class="page-title" style="font-size:20px; margin-bottom:6px;">生成我的中轴寻迹卡</h2>
+            <p class="page-desc">把你的路线、纹样卡和徽章合成一张中国风分享卡。</p>
+            <button class="btn primary" onclick="showToast('分享卡已生成，等待保存到相册')">生成我的中轴寻迹卡</button>
+          </div>
+        </section>
+
+        <nav class="bottom-nav" aria-label="底部导航">
+          <button class="nav-item active" data-tab="trace" onclick="switchTab('trace')"><span
+              class="icon">⌂</span><span>寻迹</span></button>
+          <button class="nav-item" data-tab="activity" onclick="switchTab('activity')"><span
+              class="icon">◎</span><span>活动</span></button>
+          <button class="nav-item" data-tab="mine" onclick="switchTab('mine')"><span
+              class="icon">◐</span><span>我的</span></button>
+        </nav>
+
+        <div class="camera-overlay" id="cameraOverlay">
+          <div class="camera-header">
+            <button class="camera-close" onclick="closeCamera()">✕</button>
+            <span>拍照识别纹样</span>
+            <div style="width:28px"></div>
+          </div>
+          <div class="camera-viewfinder">
+            <video id="cameraVideo" autoplay playsinline
+              style="position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: -1;"></video>
+            <div class="camera-frame"></div>
+          </div>
+          <div class="camera-controls">
+            <button class="shutter-btn" onclick="takePhoto()"></button>
+          </div>
+        </div>
+
+        <div class="toast" id="toast"></div>
+      </div>
+    </main>
+    <button class="side-control" onclick="nextPage()" aria-label="下一页">›</button>
+  </div>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
