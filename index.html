@@ -24,13 +24,7 @@
             <p class="subtitle">跟着小衡，走懂北京中轴线。</p>
             <div class="mascot-wrap" aria-label="AI吉祥物小衡">
               <div class="ring"></div>
-              <div class="mascot">
-                <div class="hat"></div>
-                <div class="body"></div>
-                <div class="eye left"></div>
-                <div class="eye right"></div>
-                <div class="mouth"></div>
-              </div>
+              <div class="mascot-character" role="img" aria-label="AI吉祥物小衡"></div>
             </div>
             <p class="page-desc hero-desc">我是 AI 吉祥物“小衡”。我会根据你的兴趣，推荐路线、讲解景点，还能帮你识别古建筑纹样。</p>
             <div style="display: flex; gap: 12px; justify-content: center; width: 100%;">
@@ -47,6 +41,32 @@
           <div class="top-mark"><span>偏好选择</span></div>
           <h2 class="page-title">先告诉小衡，你想怎么逛</h2>
           <p class="page-desc">三步生成你的个性化中轴线游览方式。每选一项，小衡都会实时记住。</p>
+
+          <div class="paper-card extra-info-card">
+            <h3 class="question-title">如果能够告诉小衡更多信息</h3>
+            <p class="extra-info-tip">我会给你推荐更加个性化的内容哦～</p>
+            <div class="profile-form">
+              <label class="profile-field">
+                <span>年龄</span>
+                <input id="userAge" type="number" min="1" max="120" placeholder="例如 18" oninput="syncPreferenceState()" />
+              </label>
+              <label class="profile-field">
+                <span>学历</span>
+                <select id="userEducation" onchange="syncPreferenceState()">
+                  <option value="">请选择</option>
+                  <option>小学及以下</option>
+                  <option>初中</option>
+                  <option>高中/中专</option>
+                  <option>本科/专科</option>
+                  <option>研究生及以上</option>
+                </select>
+              </label>
+              <label class="profile-field full">
+                <span>兴趣爱好</span>
+                <input id="userHobbies" type="text" placeholder="例如 摄影、历史、盖章、亲子游" oninput="syncPreferenceState()" />
+              </label>
+            </div>
+          </div>
 
           <div class="paper-card">
             <h3 class="question-title">你想怎么玩</h3>
@@ -177,15 +197,18 @@
             <button class="btn ghost" onclick="answerQuestion('meaning')">这个纹样有什么含义？</button>
             <button class="btn ghost" onclick="answerQuestion('axis')">它和中轴线有什么关系？</button>
           </div>
+          <div class="custom-question-box">
+            <input id="customQuestionInput" type="text" value="我想问点别的" aria-label="自定义提问"
+              onfocus="clearCustomQuestionHint(this)" />
+            <button class="btn secondary" onclick="answerCustomQuestion()">提问</button>
+          </div>
         </section>
 
         <section class="page" data-tab="mine">
           <div class="top-mark"><span>我的足迹 / 徽章</span></div>
           <div class="profile-card">
             <div class="profile-head">
-              <img class="profile-avatar"
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
-                alt="微信头像" />
+              <img class="profile-avatar" src="assets/images/xiaoheng.png" alt="微信头像" />
               <div>
                 <h2>微信用户_1024</h2>
                 <p>我的中轴寻迹成果</p>
@@ -202,7 +225,38 @@
             <div class="badge" style="margin:0 auto 10px;">卡</div>
             <h2 class="page-title" style="font-size:20px; margin-bottom:6px;">生成我的中轴寻迹卡</h2>
             <p class="page-desc">把你的路线、纹样卡和徽章合成一张中国风分享卡。</p>
-            <button class="btn primary" onclick="showToast('分享卡已生成，等待保存到相册')">生成我的中轴寻迹卡</button>
+            <button class="btn primary" onclick="openShareCardPage()">生成我的中轴寻迹卡</button>
+          </div>
+        </section>
+
+        <section class="page" data-tab="mine">
+          <div class="top-mark"><span>中轴寻迹卡</span></div>
+          <button class="back-link" onclick="backToMine()">‹ 返回我的</button>
+          <div class="poster-card" id="sharePoster">
+            <div class="poster-seal">軸</div>
+            <p class="poster-kicker">我的北京中轴线足迹</p>
+            <h2>中轴寻迹纪念卡</h2>
+            <div class="poster-avatar-wrap">
+              <img class="poster-avatar" src="assets/images/xiaoheng.png" alt="小衡头像" />
+            </div>
+            <p class="poster-user">微信用户_1024</p>
+            <div class="poster-route" id="posterRoute">看见礼序</div>
+            <div class="poster-grid">
+              <div><strong>2</strong><span>已走路线</span></div>
+              <div><strong>1/3</strong><span>纹样收集</span></div>
+              <div><strong>1</strong><span>获得徽章</span></div>
+              <div><strong id="posterMode">简短版</strong><span>讲解偏好</span></div>
+            </div>
+            <p class="poster-desc" id="posterDesc">小衡陪我走进中轴线，在古建、故事与纹样里发现北京的秩序之美。</p>
+            <div class="poster-tags" id="posterTags"><span>古建筑</span><span>看见礼序</span></div>
+            <div class="poster-footer">
+              <div class="fake-qr"></div>
+              <span>扫码一起跟着小衡寻迹</span>
+            </div>
+          </div>
+          <div class="share-actions">
+            <button class="btn secondary" onclick="backToMine()">返回修改</button>
+            <button class="btn primary" onclick="saveShareCard()">保存/分享寻迹卡</button>
           </div>
         </section>
 

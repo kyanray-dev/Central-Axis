@@ -28,16 +28,23 @@ const pages = Array.from(document.querySelectorAll('.page'));
       const play = document.querySelector('[data-group="play"] .chip.active');
       const mode = document.querySelector('[data-group="mode"] .chip.active');
       const interests = Array.from(document.querySelectorAll('[data-group="interest"] .chip.active')).map(item => item.textContent);
+      const age = document.getElementById('userAge');
+      const education = document.getElementById('userEducation');
+      const hobbies = document.getElementById('userHobbies');
       state.play = play ? play.textContent : '轻松逛';
       state.mode = mode ? mode.textContent : '简短版';
       state.interest = interests.length ? interests : ['古建筑'];
+      state.age = age ? age.value.trim() : '';
+      state.education = education ? education.value : '';
+      state.hobbies = hobbies ? hobbies.value.trim() : '';
       updatePreferenceSummary();
     }
 
     function updatePreferenceSummary() {
       const summary = document.getElementById('prefSummary');
       if (!summary) return;
-      const allPrefs = [state.play, ...state.interest, state.mode].join(' · ');
+      const profilePrefs = [state.age && `${state.age}岁`, state.education, state.hobbies].filter(Boolean);
+      const allPrefs = [state.play, ...state.interest, state.mode, ...profilePrefs].join(' · ');
       summary.innerHTML = `<span style="opacity: 0.75; margin-right: 6px;">已选：</span><b>${allPrefs}</b>`;
     }
 
@@ -49,6 +56,7 @@ const pages = Array.from(document.querySelectorAll('.page'));
       if (current === 1) syncPreferenceState();
       if (current === 2) updateRouteSummary();
       if (current === 4) updateGuideByState();
+      if (current === 6) updateShareCard();
     }
 
     function startJourney() {
@@ -95,7 +103,8 @@ const pages = Array.from(document.querySelectorAll('.page'));
     function updateRouteSummary() {
       const summary = document.getElementById('routeSummary');
       if (!summary) return;
-      summary.innerHTML = `小衡判断你偏向 <b>${state.play}</b>，关注 <b>${state.interest.join(' · ')}</b>，推荐优先体验“${state.route}”。`;
+      const profileText = [state.age && `${state.age}岁`, state.education, state.hobbies && `喜欢${state.hobbies}`].filter(Boolean).join('、');
+      summary.innerHTML = `小衡判断你偏向 <b>${state.play}</b>，关注 <b>${state.interest.join(' · ')}</b>${profileText ? `，并结合你提供的 <b>${profileText}</b>` : ''}，推荐优先体验“${state.route}”。`;
     }
 
     function selectRoute(card) {
@@ -191,6 +200,36 @@ const pages = Array.from(document.querySelectorAll('.page'));
     function switchTab(tab) {
       const target = tab === 'trace' ? 0 : tab === 'activity' ? 3 : 5;
       goPage(target);
+    }
+
+    function openShareCardPage() {
+      syncPreferenceState();
+      updateShareCard();
+      goPage(6);
+      showToast('中轴寻迹卡已生成');
+    }
+
+    function backToMine() {
+      goPage(5);
+    }
+
+    function updateShareCard() {
+      const route = document.getElementById('posterRoute');
+      const mode = document.getElementById('posterMode');
+      const desc = document.getElementById('posterDesc');
+      const tags = document.getElementById('posterTags');
+      if (!route || !mode || !desc || !tags) return;
+      const profileText = [state.age && `${state.age}岁`, state.education, state.hobbies && `喜欢${state.hobbies}`].filter(Boolean).join('，');
+      route.textContent = state.route;
+      mode.textContent = state.mode;
+      desc.textContent = profileText
+        ? `小衡结合“${profileText}”为我推荐了「${state.route}」，一路发现中轴线里的秩序、纹样与故事。`
+        : `小衡陪我体验「${state.route}」，在古建、故事与纹样里发现北京的秩序之美。`;
+      tags.innerHTML = [...state.interest, state.route, state.play].map(item => `<span>${item}</span>`).join('');
+    }
+
+    function saveShareCard() {
+      showToast('寻迹卡已生成，可截图保存或转发分享');
     }
 
     function showToast(text) {
@@ -301,6 +340,22 @@ const pages = Array.from(document.querySelectorAll('.page'));
         title.textContent = '小衡回答：与中轴线的关系';
         text.textContent = '中轴线强调方位、等级与礼序；古建筑纹样则把这种秩序缩小到梁枋、屋顶和细部里。看懂纹样，就能从微观处理解中轴线的宏观秩序。';
       }
+    }
+
+    function clearCustomQuestionHint(input) {
+      if (input.value === '我想问点别的') {
+        input.value = '';
+      }
+    }
+
+    function answerCustomQuestion() {
+      const input = document.getElementById('customQuestionInput');
+      const title = document.getElementById('modeTitle');
+      const text = document.getElementById('modeText');
+      const question = input && input.value.trim() ? input.value.trim() : '我想问点别的';
+      title.textContent = `小衡回答：${question}`;
+      text.textContent = `当然可以。你可以继续问我关于${state.matchedSpot ? `「${state.matchedSpot.name}」` : '当前路线'}的历史故事、建筑细节、拍照角度或附近打卡点，小衡会结合你的偏好继续讲给你听。`;
+      showToast('小衡收到你的问题啦');
     }
 
     syncPreferenceState();
